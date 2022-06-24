@@ -27,7 +27,6 @@ Plug 'morhetz/gruvbox'
 Plug 'preservim/nerdtree'
 Plug 'mattn/emmet-vim'
 call plug#end()
-)
 ```
 open vim and type the code below
 ```
