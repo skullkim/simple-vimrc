@@ -1,58 +1,37 @@
 # my vimrc setting
 
 ## Apply vimrc setting
-```
+```bash
 cp ./vimrc ~/.vimrc
 sudo apt-get update
 sudo apt install neovim
 sudo apt install nodejs
 sudo apt install npm
-sudo apt install nvm
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.1/install.sh | bash
 nvm install --lts
 sudo apt install yarn
 ln -s ~/.vimrc ~/.config/nvim/init.vim
 curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 ```
-copy and paste the code below to .vimrc
+.vimrc로 nvim 세팅을 변경하기 위해 다음 코드를 ~/.config/nvim/init.vim에 작성한다
+```bash
+set runtimepath+=~/.vim,~/.vim/after
+set packpath+=~/.vim
+source ~/.vimrc
 ```
-call plug#begin('~/.config/nvim/plugged')
-" Use release branch
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" Or latest tag
-Plug 'neoclide/coc.nvim', {'tag': '*', 'branch': 'release'}
-" Or build from source code by use yarn: https://yarnpkg.com
-Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
-Plug 'morhetz/gruvbox'
-Plug 'preservim/nerdtree'
-Plug 'mattn/emmet-vim'
-call plug#end()
-```
-open vim and type the code below
+
+vimrc파일을 ~/경로에 놓고 .vimrc로 변경
+그 후 .vimrc를 킨 채로 아래 커맨드 입력
 ```
 :w
 :source %
 :PlugInstall
-```
-copy and paste the code below to .vimrc
-```
-"테마 변경
-st_dark="hard"
-set background=dark
-autocmd vimenter * colorscheme gruvbox
-
-"nerdtree 단축키 설정
-nnoremap <leader>n :NERDTreeFocus<CR>
-nnoremap <C-n> :NERDTree<CR>
-nnoremap <C-t> :NERDTreeToggle<CR>
-```
-open vim and type the code below
-```
-:CocInstall coc-clangd coc-java coc-tsserver coc-css coc-json coc-html
-
+:CocInstall coc-clangd coc-java coc-tsserver coc-css coc-json coc-html coc-kotlin
 :CocConfig
-
-# copy and paste below code to coc configuration file
+```
+CocConfig를 통해 열린 창에 아래 코드 입력
+```
 {
 	"clangd.semanticHighlighting": true,
 	"clangd.path":"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clangd",
@@ -68,4 +47,4 @@ open vim and type the code below
 	"suggest.preferCompleteThanJumpPlaceholder": true,
 }
 ```
-restart vim
+vim 재시작
