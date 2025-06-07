@@ -73,21 +73,19 @@ algo() {
      echo "$answer"
  }
 
-
-startAlgo() {
-  local target="Main.java"
-  cat << 'EOF' > "$target"
-import java.io.*;
-import java.util.*;
-\n
-class Main {
-  static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-  static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-  public static void main(String[] args) throws IOException {
-    StringTokenizer st = new StringTokenizer(br.readLine());
-  }
-}
-EOF
-  echo "Created: $PWD/$target"
-}
-
+ startAlgo() {
+   local target="Main.java"
+   cat << 'EOF' > "$target"
+ import java.io.*;
+ import java.util.*;
+ \n
+ class Main {
+   static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+   static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+   public static void main(String[] args) throws IOException {
+   ¿ StringTokenizer st = new StringTokenizer(br.readLine());
+   }
+ }
+ EOF
+   echo "Created: $PWD/$target"
+ }
