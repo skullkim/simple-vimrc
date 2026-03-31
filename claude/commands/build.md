@@ -1,0 +1,1 @@
+Run ./gradlew clean build to perform a clean build of the project.

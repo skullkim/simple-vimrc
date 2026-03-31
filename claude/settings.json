@@ -1,0 +1,37 @@
+{
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
+  "permissions": {
+    "allow": [
+      "Read",
+      "Glob",
+      "Grep",
+      "Bash(~/scripts/fetch-jira.sh *)",
+      "Bash(~/scripts/fetch-confluence.sh *)",
+      "Bash(python *)",
+      "Bash(python3 *)",
+      "Bash(cat *)",
+      "Bash(ls *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(find *)",
+      "Bash(wc *)",
+      "Bash(file *)",
+      "WebFetch",
+      "WebSearch",
+      "mcp__tavily__*"
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash ~/.claude/statusline-command.sh"
+  },
+  "enabledPlugins": {
+    "code-simplifier@claude-plugins-official": true,
+    "atlassian@claude-plugins-official": true
+  },
+  "effortLevel": "high",
+  "teammateMode": "tmux",
+  "model": "opus[1m]"
+}
