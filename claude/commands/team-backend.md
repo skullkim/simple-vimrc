@@ -1,7 +1,7 @@
 ---
 description: Backend 팀 워크플로우로 기능 구현 및 테스트
 argument-hint: [태스크 설명]
-allowed-tools: Read, Grep, Glob, Agent, Edit, Write, Bash, TeamCreate, SendMessage, TaskCreate, TaskGet, TaskList, TaskUpdate
+allowed-tools: Read, Grep, Glob, Agent, Edit, Write, Bash, TeamCreate, SendMessage, TaskCreate, TaskGet, TaskList, TaskUpdate, Skill
 ---
 
 # Backend Development Team Workflow
@@ -26,6 +26,7 @@ $ARGUMENTS
 - **지침**:
 	- 어떤 부분을 어떻게 수정할지 plan을 만들것.
 	- 사용자가 구현 시작하라고 하기 전까지 사용자와 대화하며 구현 상세를 수정할것.
+	- plan 확정 시, 구현 시작 전에 반드시 사용자에게 **Swagger 문서화 agent(Teammate 4)를 활성화할지** 물어볼것. 사용자가 활성화하지 않겠다고 하면 Teammate 4는 실행하지 않는다.
 	- 사용자가 구현 시작 명령을 하면 Teammate1에게 구현 상세를 전달할것.
 
 ### Teammate 1: Senior Backend Developer A
@@ -74,8 +75,15 @@ $ARGUMENTS
 1. TeamCreate로 팀을 생성한다 (tmux pane 분할 활성화)
 2. Teammate0이 태스크를 분석하여 Teammate 1, 2의 작업 범위를 나눈다
 3. Teammate 1, 2를 Agent(team_name 포함)로 병렬 실행하여 각자 할당된 기능을 구현한다
-4. 구현 완료 후 Teammate 3, 4를 Agent(team_name 포함)로 병렬 실행한다
+4. 구현 완료 후 Teammate 3을 실행하고, Planner 단계에서 사용자가 Swagger 문서화를 승인한 경우에만 Teammate 4도 병렬 실행한다
     - Teammate 3: 테스트 코드 작성 및 실행
-    - Teammate 4: Swagger 문서화 애노테이션 추가
+    - Teammate 4: Swagger 문서화 애노테이션 추가 (사용자 승인 시에만)
 5. 테스트 실패 시 원인을 파악하고 수정 후 재실행한다
 6. 모든 작업 완료 후 SendMessage(shutdown_request)로 teammate를 종료한다
+7. 마지막으로 이번 작업에서 변경/생성/삭제된 파일을 모두 출력한다
+    - `git status --short` 와 `git diff --name-status HEAD` 결과를 합쳐서, Modified / Added / Deleted / Renamed 로 분류해 사용자에게 보여준다 (읽기 전용 조회만, 커밋·체크아웃·리셋 등 git 조작은 절대 하지 않는다)
+    - 각 파일은 절대 경로 또는 repo 루트 기준 상대 경로로 표기한다
+8. 7단계 변경 목록에 API 생성·수정이 포함되어 있으면 테스트용 curl 커맨드를 출력한다
+    - 대상 판별: 변경 파일 중 Controller / Router 류 (`@RestController`, `@Controller`, `@RequestMapping`, `@Get/Post/Put/Delete/PatchMapping`, NestJS `@Controller`/`@Get`·`@Post` 등, Express `router.<method>(...)`)에서 endpoint signature(HTTP 메서드, URL, path/query/body/header) 가 새로 추가되었거나 변경된 메서드를 추출한다. 내부 로직만 바뀌고 signature가 그대로면 제외한다.
+    - 각 대상 endpoint에 대해 `curl` 스킬을 Skill 도구로 호출한다 (인자: 해당 endpoint를 식별할 수 있는 URL 경로 또는 메서드명). 스킬 출력을 그대로 사용자에게 보여준다.
+    - API 변경이 없으면 이 단계는 건너뛴다.
